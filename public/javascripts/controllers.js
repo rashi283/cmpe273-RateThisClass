@@ -11,7 +11,12 @@ function ClassItemCtrl($scope, $routeParams) {
 // Creating a new class
 function ClassNewCtrl($scope, $location, Class) {
 	$scope.thisclass = {
-		question : '',
+		//Rashi
+		className : '',
+		professor : '',
+		session : '',
+		category : '',
+		//Rashi
 		choices : [ {
 			text : ''
 		}, {

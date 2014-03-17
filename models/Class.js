@@ -12,10 +12,24 @@ var choiceSchema = new mongoose.Schema({
 	rate : [ rateSchema ]
 });
 exports.ClassSchema = new mongoose.Schema({
-	question : {
+	//Rashi
+	className : {
 		type : String,
 		required : true
 	},
+	professor : {
+		type : String,
+		required : true
+	},
+	session : {
+		type : String, 
+		required : true
+	},
+	category : {
+		type : String,
+		required : true
+	}, 
+	//Rashi
 	choices : [ choiceSchema ]
 });
 
