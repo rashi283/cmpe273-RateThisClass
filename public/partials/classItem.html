@@ -24,12 +24,25 @@
 	          <br>
 		  </div>
 		  <p><hr></p>
+		  
 		  <div class="row">
-            <div class="col-xs-12">
-              <button type="button" class="btn btn-default" ng-click="addItem()"><span class="glyphicon glyphicon-plus">
-</span> Add more items</button>
+            <div class="col-xs-5">
+              <select ng-model="thisclass.items.category" class="form-control">
+                  <option value="Lab">Lab</option>
+                  <option value="Assignment">Assignment</option>
+                  <option value="Lecture">Lecture</option>
+                  <option value="Project">Project</option>
+              </select>
             </div>
+            <div class="col-xs-5" align="left"> 
+               <input type="text" ng-model="thisclass.items.text" class="form-control" placeholder="Enter item text"><br>
+            </div>
+            <div class="col-xs-12"> 
+               <button class="btn btn-primary pull-right" type="submit" style="width:100px; height:30px;">Add item &raquo;</button>
+            </div>
+            
           </div>
+          
           <p><hr></p>
           <div class="row">
             <div class="col-xs-6">

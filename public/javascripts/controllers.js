@@ -9,6 +9,7 @@ function ClassItemCtrl($scope, $routeParams, Class) {
 	};
 	$scope.addItem = function() {
 		$scope.thisclass.items.push({
+			cateogry : '',
 			text : ''
 		});
 	};
