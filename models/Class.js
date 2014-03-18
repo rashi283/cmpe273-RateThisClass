@@ -6,31 +6,28 @@ var mongoose = require('mongoose');
 var rateSchema = new mongoose.Schema({
 	ip : 'String'
 });
-var choiceSchema = new mongoose.Schema({
+var itemSchema = new mongoose.Schema({
 	text : String,
-	//category: String //LAB, PROJECT, ASSIGNMENT,
+	//Shaji
+	category: String, //LAB, PROJECT, ASSIGNMENT etc
 	rate : [ rateSchema ]
 });
 exports.ClassSchema = new mongoose.Schema({
-	//Rashi
+	
 	className : {
 		type : String,
 		required : true
 	},
 	professor : {
-		type : String,
+		type : String, 
 		required : true
 	},
 	session : {
 		type : String, 
 		required : true
-	},
-	category : {
-		type : String,
-		required : true
-	}, 
-	//Rashi
-	choices : [ choiceSchema ]
+	},	
+	//Shaji
+	items : [ itemSchema ]
 });
 
 

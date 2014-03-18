@@ -17,24 +17,25 @@ id="thisclassProfessor" placeholder="Enter class professor">
             <label for="thisclassSession">Session</label>
             <input type="text" ng-model="thisclass.session" class="form-control" 
 id="thisclassSession" placeholder="Enter class session">
-          </div>         
-          <div class="form-group">
+          </div>  
+ <!--Shaji: Removing category from here -->                
+<!--           <div class="form-group">
             <label for="thisclassCategory">Category</label>
             <input type="text" ng-model="thisclass.category" class="form-control" 
 id="thisclassCategory" placeholder="Enter class category">
-          </div>
-<!--//Rashi -->
+          </div> -->
+<!--Shaji -->
           <div class="form-group">
-            <label>Choices</label>
-            <div ng-repeat="choice in thisclass.choices">
-              <input type="text" ng-model="choice.text" class="form-control" 
-placeholder="Enter choice {{$index+1}} text"><br>
+            <label>Items to rate</label>
+            <div ng-repeat="item in thisclass.items">
+              <input type="text" ng-model="item.text" class="form-control" 
+placeholder="Enter item {{$index+1}} text"><br>
             </div>
           </div>    
           <div class="row">
             <div class="col-xs-12">
               <button type="button" class="btn btn-default" ng-click=
-"addChoice()"><span class="glyphicon glyphicon-plus">
+"addItem()"><span class="glyphicon glyphicon-plus">
 </span> Add another</button>
             </div>
           </div>

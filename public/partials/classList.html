@@ -20,7 +20,7 @@ placeholder="Search for a class">
           </ul>
           <ul ng-switch-default>
             <li ng-repeat="thisclass in classes | filter:query">
-              <a href="#/class/{{thisclass._id}}">{{thisclass.question}}</a>
+              <a href="#/class/{{thisclass._id}}">{{thisclass.className}}</a>
             </li>
           </ul>
         </div>

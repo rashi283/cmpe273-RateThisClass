@@ -15,9 +15,9 @@ function ClassNewCtrl($scope, $location, Class) {
 		className : '',
 		professor : '',
 		session : '',
-		category : '',
-		//Rashi
-		choices : [ {
+		
+		//Shaji
+		items : [ {
 			text : ''
 		}, {
 			text : ''
@@ -25,22 +25,23 @@ function ClassNewCtrl($scope, $location, Class) {
 			text : ''
 		} ]
 	};
-	$scope.addChoice = function() {
-		$scope.thisclass.choices.push({
+	//Shaji
+	$scope.addItem = function() {
+		$scope.thisclass.items.push({
 			text : ''
 		});
 	};
 	$scope.createClass = function() {
 		var thisclass = $scope.thisclass;
-		if (thisclass.question.length > 0) {
-			var choiceCount = 0;
-			for ( var i = 0, ln = thisclass.choices.length; i < ln; i++) {
-				var choice = thisclass.choices[i];
-				if (choice.text.length > 0) {
-					choiceCount++;
+		if (thisclass.className.length > 0) {
+			var itemCount = 0;
+			for ( var i = 0, ln = thisclass.items.length; i < ln; i++) {
+				var item = thisclass.items[i];
+				if (item.text.length > 0) {
+					itemCount++;
 				}
 			}
-			if (choiceCount > 1) {
+			if (itemCount > 0) {
 				var newClass = new Class(thisclass);
 				newClass.$save(function(p, resp) {
 					if (!p.error) {
@@ -50,10 +51,10 @@ function ClassNewCtrl($scope, $location, Class) {
 					}
 				});
 			} else {
-				alert('You must enter at least two choices');
+				alert('You must enter at least one item');
 			}
 		} else {
-			alert('You must enter a question');
+			alert('You must enter a name for the class');
 		}
 	};
 }
