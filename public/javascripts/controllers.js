@@ -7,6 +7,11 @@ function ClassItemCtrl($scope, $routeParams, Class) {
 	$scope.thisclass = Class.get({classId: $routeParams.classId});
 	$scope.rate = function() {
 	};
+	$scope.addItem = function() {
+		$scope.thisclass.items.push({
+			text : ''
+		});
+	};
 }
 // Creating a new class
 function ClassNewCtrl($scope, $location, Class) {

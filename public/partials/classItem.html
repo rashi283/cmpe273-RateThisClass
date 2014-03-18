@@ -1,26 +1,27 @@
 <div class="page-header">
    <h1>View Class</h1>
 </div>
-<div class="well well-lg">
-   <strong>Class Name: </strong>{{thisclass.className}}<br>
-   <strong>Professor: </strong>{{thisclass.professor}}<br>
-   <strong>Session: </strong>{{thisclass.session}}<br>
+<div class="well well-lg" >
+   <h4 style="text-align:justify;"><strong>Class Name: </strong>{{thisclass.className}}</h4>
+   <h4 style="text-align:justify;"><strong>Professor: </strong>{{thisclass.professor}}</h4>
+   <h4 style="text-align:justify;"><strong>Session: </strong>{{thisclass.session}}</h4>
 </div>
 <div ng-hide="thisclass.userRated">
-   <p class="lead">Please select one of the following options:</p>
+   <p class="lead" style="color:blue;font-size:15px;"> Please select one of the following options:</p>
       <form role="form" ng-submit="rate()">
 	      <div ng-repeat="item in thisclass.items">
 	          <div class="row">
 	             <div class="col-xs-5">
 	                 <label>
-				         <input type="radio" name="item" ng-model="thisclass.userRate" value="{{item._id}}">
+				         <input type="radio" name="item" ng-model="thisclass.userRate" value="{{item._id}}" style="font-size:30px;">
 				                {{item.text}}
 				     </label>
 				 </div>
 				 <div class="col-xs-7" align="left">
-				     <button class="btn btn-primary pull-left" type="submit">Rate &raquo;</button>
+				     <button class="btn btn-primary pull-left" type="submit" style="width:75px; height:35px;">Rate &raquo;</button>
 			     </div>
 	          </div>
+	          <br>
 		  </div>
 		  <p><hr></p>
 		  <div class="row">
