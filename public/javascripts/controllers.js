@@ -3,9 +3,9 @@ function ClassListCtrl($scope, Class) {
 	$scope.classes = Class.query();
 }
 // View a class
-function ClassItemCtrl($scope, $routeParams) {
-	$scope.thisclass = {};
-	$scope.vote = function() {
+function ClassItemCtrl($scope, $routeParams, Class) {
+	$scope.thisclass = Class.get({classId: $routeParams.classId});
+	$scope.rate = function() {
 	};
 }
 // Creating a new class
