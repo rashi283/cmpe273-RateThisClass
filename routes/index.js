@@ -26,24 +26,12 @@ exports.thisclass = function(req, res) {
 		lean : true
 	}, function(err, thisclass) {
 		if (thisclass) {
-			var userVoted = false, userChoice, totalVotes = 0;
-			for (c in thisclass.choices) {
-				var choice = thisclass.choices[c];
-				for (v in choice.votes) {
-					var vote = choice.votes[v];
-					totalVotes++;
-					if (vote.ip === (req.header('x-forwarded-for') || req.ip)) {
-						userVoted = true;
-						userChoice = {
-							_id : choice._id,
-							text : choice.text
-						};
-					}
-				}
+			//Anne
+			for (r in thisclass.items) {
+				 thisclass.items[r].rate=0;
+				
 			}
-			thisclass.userVoted = userVoted;
-			thisclass.userChoice = userChoice;
-			thisclass.totalVotes = totalVotes;
+			
 			res.json(thisclass);
 		} else {
 			res.json({

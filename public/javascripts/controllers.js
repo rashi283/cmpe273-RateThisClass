@@ -20,19 +20,26 @@ function ClassNewCtrl($scope, $location, Class) {
 		className : '',
 		professor : '',
 		session : '',
-		
+		//Anne
 		//Shaji
 		items : [ {
+			category:'',
 			text : ''
-		}, {
+		},
+		{
+			category:'',
 			text : ''
-		}, {
+		},
+		{
+			category:'',
 			text : ''
-		} ]
+		}
+		]
 	};
 	//Shaji
 	$scope.addItem = function() {
 		$scope.thisclass.items.push({
+			category:'',
 			text : ''
 		});
 	};
