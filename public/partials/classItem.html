@@ -1,13 +1,13 @@
 <div class="page-header">
-   <h1>View Class</h1>
+   <h1>Rate this class!</h1>
 </div>
 <div class="well well-lg" >
-   <h4 style="text-align:justify;"><strong>Class Name: </strong>{{thisclass.className}}</h4>
+   <h4 style="text-align:justify;"><strong>Class: </strong>{{thisclass.className}}</h4>
    <h4 style="text-align:justify;"><strong>Professor: </strong>{{thisclass.professor}}</h4>
    <h4 style="text-align:justify;"><strong>Session: </strong>{{thisclass.session}}</h4>
 </div>
 <div ng-hide="thisclass.userRated">
-   <p class="lead" style="color:blue;font-size:15px;"> Please select one of the following options:</p>
+   <p class="lead" style="color:blue;font-size:15px;"> Please select one of the items to grade:</p>
       <form role="form" ng-submit="rate()">
 	      <div ng-repeat="item in thisclass.items">
 	          <div class="row">
@@ -27,7 +27,7 @@
 		  
 		  <div class="row">
             <div class="col-xs-5">
-              <select ng-model="thisclass.items.category" class="form-control">
+              <select ng-model="thisclass.items.category" class="form-control" title="Choose a category">
                   <option value="Lab">Lab</option>
                   <option value="Assignment">Assignment</option>
                   <option value="Lecture">Lecture</option>

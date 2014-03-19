@@ -1,60 +1,63 @@
-       <div class="page-header">
-          <h1>Create New Class</h1>
-        </div>
-        <form role="form" ng-submit="createClass()">
-<!--//Rashi -->
-          <div class="form-group">
-            <label for="thisclassClassName">Class Name</label>
-            <input type="text" ng-model="thisclass.className" class="form-control" 
-id="thisclassClassName" placeholder="Enter class className">
-          </div>
-          <div class="form-group">
-            <label for="thisclassProfessor">Professor</label>
-            <input type="text" ng-model="thisclass.professor" class="form-control" 
-id="thisclassProfessor" placeholder="Enter class professor">
-          </div>
-          <div class="form-group">
-            <label for="thisclassSession">Session</label>
-            <input type="text" ng-model="thisclass.session" class="form-control" 
-id="thisclassSession" placeholder="Enter class session">
-          </div>  
-          <!-- Anne --!>
-          <label>Items to rate</label>
-          <div class="row">
-           <div ng-repeat="item in thisclass.items">
-            <div class="col-xs-5">
-             <select ng-model="item.category" class="form-control" placeholder="Choose a category">
-                 <option value="Lab">Lab</option>
-                  <option value="Assignment">Assignment</option>
-                  <option value="Lecture">Lecture</option>
-                  <option value="Project">Project</option>
-              </select>
-            </div>
-            <div class="col-xs-5" align="right"> 
-             <input type="text" ng-model="item.text" class="form-control" placeholder="Enter item text"><br>
-               </div>
-            </div>
-           </div>
-           </div>
-           
-          <div class="row">
-            <div class="col-xs-12">
-              <button type="button" class="btn btn-default" ng-click=
-"addItem()"><span class="glyphicon glyphicon-plus">
-</span> Add another</button>
-            </div>
-          </div>
-          <p><hr></p>
-          <div class="row">
-            <div class="col-xs-6">
-              <a href="#/classes" class="btn btn-default" role="button">
-<span class="glyphicon glyphicon-arrow-left"></span> 
-Back to Class List</a>
-            </div>
-            <div class="col-xs-6">
-              <button class="btn btn-primary pull-right" type="submit">
-	Create Class &raquo;</button>
-            </div>
-          </div>
-          <p>&nbsp;</p>
-        </form>
+
+<div class="page-header">
+	<h1>Create New Class</h1>
+</div>
+<form role="form" ng-submit="createClass()">
+	<div class="form-group">
+		<label for="thisclassClassName">Class Name</label> <input type="text"
+			ng-model="thisclass.className" class="form-control"
+			id="thisclassClassName" placeholder="Enter class name">
+	</div>
+	<div class="form-group">
+		<label for="thisclassProfessor">Professor</label> <input type="text"
+			ng-model="thisclass.professor" class="form-control"
+			id="thisclassProfessor" placeholder="Enter professor's name">
+	</div>
+	<div class="form-group">
+		<label for="thisclassSession">Session</label> <input type="text"
+			ng-model="thisclass.session" class="form-control"
+			id="thisclassSession" placeholder="Enter class session">
+	</div>
+	<label>Items to rate</label>
+	<div class="row">
+		<div ng-repeat="item in thisclass.items">
+			<div class="col-xs-5">
+				<select ng-model="item.category" class="form-control"
+					title="Choose a category">
+					<option value="Lab">Lab</option>
+					<option value="Assignment">Assignment</option>
+					<option value="Lecture">Lecture</option>
+					<option value="Project">Project</option>
+				</select>
+			</div>
+			<div class="col-xs-5" align="right">
+				<input type="text" ng-model="item.text" class="form-control"
+					placeholder="Enter item text"><br>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<button type="button" class="btn btn-default" ng-click="addItem()">
+				<span class="glyphicon glyphicon-plus"> </span> Add another
+			</button>
+		</div>
+	</div>
+	<p>
+	<hr>
+	</p>
+	<div class="row">
+		<div class="col-xs-6">
+			<a href="#/classes" class="btn btn-default" role="button"> <span
+				class="glyphicon glyphicon-arrow-left"></span> Back to Class List
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<button class="btn btn-primary pull-right" type="submit">
+				Create Class &raquo;</button>
+		</div>
+	</div>
+	<p>&nbsp;</p>
+</form>
