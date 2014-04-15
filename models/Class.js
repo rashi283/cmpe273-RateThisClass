@@ -10,7 +10,7 @@ var itemSchema = new mongoose.Schema({
 	text : String,
 	//Shaji
 	category: String, //LAB, PROJECT, ASSIGNMENT etc
-	rate : [ rateSchema ]
+	rating : [ rateSchema ]
 });
 exports.ClassSchema = new mongoose.Schema({
 	

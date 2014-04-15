@@ -25,6 +25,23 @@
 		  </div>
 		  <p><hr></p>
 		  
+		  <div ng-show="thisclass.userRated">
+          <table class="result-table">
+            <tbody>
+              <tr ng-repeat="item in thisclass.items">
+                <td>{{item.text}}</td>
+                <td>
+                  <table style="width: {{item.rating.length/thisclass.totalRating*100}}%;">
+                    <tr><td>{{item.rating.length}}</td></tr>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>  
+          <p><em>{{thisclass.totalRating}} Rating counted so far. <span ng-show="thisclass.userItem">You rated for <strong>{{thisclass.userItem.text}}
+</strong>.</span></em></p>
+</div>
+				  
 		  <div class="row">
             <div class="col-xs-5">
               <select ng-model="thisclass.items.category" class="form-control" title="Choose a category">

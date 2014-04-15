@@ -3,17 +3,35 @@ function ClassListCtrl($scope, Class) {
 	$scope.classes = Class.query();
 }
 // View a class
-function ClassItemCtrl($scope, $routeParams, Class) {
-	$scope.thisclass = Class.get({classId: $routeParams.classId});
-	$scope.rate = function() {
-	};
-	$scope.addItem = function() {
-		$scope.thisclass.items.push({
-			cateogry : '',
-			text : ''
-		});
-	};
-}
+function ClassItemCtrl($scope, $routeParams, socket, Class) { 
+    $scope.thisclass = Class.get({classId: $routeParams.classId});
+    socket.on('myrate', function(data) {
+      console.dir(data);
+      if(data._id === $routeParams.classId) {
+        $scope.thisclass = data;
+      }
+    });
+    socket.on('rate', function(data) {
+      console.dir(data);
+      if(data._id === $routeParams.classId) {
+        $scope.thisclass.items = data.items;
+        $scope.thisclass.totalRating = data.totalRating;
+      }   
+    });
+    $scope.rate = function() {
+      var classId = $scope.thisclass._id,
+          itemId = $scope.thisclass.userRate;
+      if(itemId) {
+        var rateObj = { class_id: classId, item: itemId };
+        socket.emit('send:rate', rateObj);
+      } else {
+        alert('You must select an option to rate for');
+      }
+    };
+  }
+
+
+
 // Creating a new class
 function ClassNewCtrl($scope, $location, Class) {
 	$scope.thisclass = {

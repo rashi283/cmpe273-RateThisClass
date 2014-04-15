@@ -34,6 +34,13 @@ app.post('/classes', routes.create);
 app.get('/users', user.list);
 
 
-http.createServer(app).listen(app.get('port'), function(){
+//http.createServer(app).listen(app.get('port'), function(){
+  //console.log('Express server listening on port ' + app.get('port'));
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+io.sockets.on('connection', routes.rate);
+
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
