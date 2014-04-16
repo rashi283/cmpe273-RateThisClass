@@ -4,7 +4,7 @@ function ClassListCtrl($scope, Class) {
 	$scope.classes = Class.query();
 }
 // View a class
-function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory) { 
+function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFactoryDel) { 
     $scope.thisclass = Class.get({classId: $routeParams.classId});
     socket.on('myrate', function(data) {
       console.dir(data);
@@ -46,6 +46,12 @@ $scope.addItem = function() {
 	}
 	
 	};	
+//Rashi
+	$scope.delItem = function() {
+		var clsId = $scope.thisclass._id;
+		ClassFactoryDel.del({ classId : clsId});
+	};
+//Rashi
   }
 
 

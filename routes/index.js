@@ -131,13 +131,27 @@ exports.update=function(req,res){
 					res.json(result);
 				}
 	            });
-
 		}
-		
-	});
-	
-	
-	
+	});	
 };
+//Rashi
+exports.del = function(req, res){
+	var clsId = req.params.id;
+	Class.findById(clsId, '', {
+		lean : true
+	}, function(err, thisclass) {
+		if (thisclass) {
+			
+			Class.remove({ '_id' : clsId}, function(err, result){
+				if (err || !result) {
+					throw 'Error';
+				} else {
+					res.json(result);
+				}
+	            });
+		}
+	});	
+};
+//Rashi
 
 

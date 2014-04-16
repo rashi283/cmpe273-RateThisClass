@@ -34,6 +34,7 @@ app.post('/classes', routes.create);
 app.post('/rate', routes.rate);
 app.put('/classes/:id/items',routes.update);
 app.get('/users', user.list);
+app.del('/classes/:id', routes.del);
 
 
 //http.createServer(app).listen(app.get('port'), function(){

@@ -8,6 +8,16 @@ services.factory('ClassFactory', function ($resource) {
         
         update: { method: 'PUT', params :{
 			classId : 'classes'}},
-        del: { method: 'DELETE', params: {id: '@id'} }
+        //del: { method: 'DELETE', params: {id: '@id'} }
+		//del : { method: 'DELETE' , params: {className : 'className'}}
     });
 });
+
+//Rashi
+services.factory('ClassFactoryDel', function($resource) 
+{
+	return $resource('classes/:classId', {}, {
+		del : { method : 'DELETE'}
+	});
+});
+//Rashi
