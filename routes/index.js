@@ -26,7 +26,6 @@ exports.thisclass = function(req, res) {
 		lean : true
 	}, function(err, thisclass) {
 		if (thisclass) {
-			//Anne
 			var userRated = false, userItem, totalRating = 0;
 			for (i in thisclass.items) {
 				var item = thisclass.items[i];
@@ -36,10 +35,10 @@ exports.thisclass = function(req, res) {
 					if(rate.ip === (req.header('x-forwarded-for') || req.ip)) {
 						userRated = true;
 						userItem = {_id: item._id, category: item.category, text: item.text};
+			
 					}
 				} 
-				 // Anne -> thisclass.items[r].rate=0;
-				
+					
 			}
 			thisclass.userRated = userRated;
 			thisclass.userItem = userItem;
@@ -73,7 +72,7 @@ exports.create = function(req, res) {
 	});
 };
 
-//Socket API for saving a vote
+//Socket API for saving a rate
 exports.rate = function(socket) {
   socket.on('send:rate', function(data) {
     var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;    
@@ -94,6 +93,7 @@ exports.rate = function(socket) {
             if(rate.ip === ip) {
               theDoc.userRated = true;
               theDoc.userItem = { _id: item._id, category: item.category, text: item.text };
+             
             }
           }
         }       
