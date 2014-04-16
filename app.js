@@ -32,6 +32,7 @@ app.get('/classes/classes', routes.list);
 app.get('/classes/:id', routes.thisclass);
 app.post('/classes', routes.create);
 app.post('/rate', routes.rate);
+app.put('/classes/:id/items',routes.update);
 app.get('/users', user.list);
 
 

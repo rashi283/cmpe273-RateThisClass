@@ -114,3 +114,30 @@ exports.rate = function(socket) {
 };
 
 //JSON API for updating a class
+exports.update=function(req,res){
+	var reqBody = req.body;
+	console.log(reqBody);
+	var item=reqBody; 
+	var classId=req.params.id;
+	Class.findById(classId, '', {
+		lean : true
+	}, function(err, thisclass) {
+		if (thisclass) {
+			
+			Class.update({ '_id' : classId}, {$push:{items:reqBody}}, function(err, result){
+				if (err || !result) {
+					throw 'Error';
+				} else {
+					res.json(result);
+				}
+	            });
+
+		}
+		
+	});
+	
+	
+	
+};
+
+

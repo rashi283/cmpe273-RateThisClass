@@ -1,9 +1,10 @@
+
 // Managing the class list
 function ClassListCtrl($scope, Class) {
 	$scope.classes = Class.query();
 }
 // View a class
-function ClassItemCtrl($scope, $routeParams, socket, Class) { 
+function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory) { 
     $scope.thisclass = Class.get({classId: $routeParams.classId});
     socket.on('myrate', function(data) {
       console.dir(data);
@@ -28,6 +29,23 @@ function ClassItemCtrl($scope, $routeParams, socket, Class) {
         alert('You must select an option to rate for');
       }
     };
+$scope.addItem = function() {
+		
+		var category=$scope.thisclass.items.category;
+		var text=$scope.thisclass.items.text;
+		if(category!=null && text!=null){
+			var item={
+					category : category,
+					text :text
+				}; 
+			$scope.thisclass.items.push(item);
+			ClassFactory.update({ classId :$routeParams.classId},item);
+		
+	}else{
+		alert('Category and Text cannot be blank');
+	}
+	
+	};	
   }
 
 

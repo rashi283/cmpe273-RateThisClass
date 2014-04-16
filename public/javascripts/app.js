@@ -1,4 +1,4 @@
-angular.module('ratethisclass', ['restModule']).config(
+angular.module('ratethisclass', ['restModule' ,'ratethisclass.services' ]).config(
 		[ '$routeProvider', function($routeProvider) {
 			$routeProvider.when('/classes', {
 				templateUrl : 'partials/classList.html',
