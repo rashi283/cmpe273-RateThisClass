@@ -22,28 +22,37 @@ exports.list = function(req, res) {
 // JSON API for getting a single class
 exports.thisclass = function(req, res) {
 	var classId = req.params.id;
-	Class.findById(classId, '', {
-		lean : true
-	}, function(err, thisclass) {
-		if (thisclass) {
+	Class.findById(classId, '', {lean : true}, function(err, thisclass) {
+		if (thisclass) 
+		{
 			var userRated = false, userItem, totalRating = 0;
-			for (i in thisclass.items) {
+			for (i in thisclass.items) 
+			{
+				//var userRated = false, userItem, totalRating = 0;			
 				var item = thisclass.items[i];
-				for (r in item.rating) {
+				console.log(item);
+				for (r in item.rating) 
+				{
 					var rate = item.rating[r];
+					//console.log(rate);
 					totalRating++;
-					if(rate.ip === (req.header('x-forwarded-for') || req.ip)) {
+					if(rate.ip === (req.header('x-forwarded-for') || req.ip)) 
+					{
 						userRated = true;
 						userItem = {_id: item._id, category: item.category, text: item.text};
-			
 					}
-				} 
 					
+				}
+				//item.userRated = userRated;
+				//item.userItem = userItem;
+				//item.totalRating = totalRating;
+				//console.log(item.userRated);
+				
 			}
 			thisclass.userRated = userRated;
 			thisclass.userItem = userItem;
 			thisclass.totalRating = totalRating;
-						
+									
 			res.json(thisclass);
 		} else {
 			res.json({

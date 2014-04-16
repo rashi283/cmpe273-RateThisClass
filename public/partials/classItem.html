@@ -23,22 +23,24 @@
 	          </div>
 	          <br>
 		  </div>
-		  <p><hr></p>
+	</form>
+</div>
+<p><hr></p>
 		  
-		  <div ng-show="thisclass.userRated">
-          <table class="result-table">
-            <tbody>
+<div ng-show="thisclass.userRated">
+	<table class="result-table">
+    	<tbody>
               <tr ng-repeat="item in thisclass.items">
                 <td>{{item.text}}</td>
                 <td>
-                  <table style="width: {{item.rating.length/thisclass.totalRating*100}}%;">
+                  <table style="background-color: lightblue; width: {{item.rating.length/thisclass.totalRating*100}}%; text-align: right">
                     <tr><td>{{item.rating.length}}</td></tr>
                   </table>
                 </td>
               </tr>
             </tbody>
           </table>  
-          <p><em>{{thisclass.totalRating}} Rating counted so far. <span ng-show="thisclass.userItem">You rated for <strong>{{thisclass.userItem.text}}
+          <p><em>{{thisclass.totalRating}} rating counted so far. <span ng-show="thisclass.userItem">You rated for <strong>{{thisclass.userItem.text}}
 </strong>.</span></em></p>
 </div>
 				  
@@ -66,8 +68,7 @@
                <a href="#/classes" class="btn btn-default" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Back to Class List</a>
             </div>
           </div>
-	   </form>
-</div>
+	   
 <p><hr></p>
 
           
