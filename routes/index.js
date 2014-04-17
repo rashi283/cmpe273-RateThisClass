@@ -9,7 +9,8 @@ exports.index = function(req, res) {
 };
 var mongoose = require('mongoose');
 //var db = mongoose.createConnection('localhost', 'ratethisclass');
-var db = mongoose.connect('mongodb://localhost/test');
+//var db = mongoose.connect('mongodb://localhost/test');
+var db = mongoose.connect('mongodb://shaji:shaji@ds053658.mongolab.com:53658/ratethisclass');
 var ClassSchema = require('../models/Class.js').ClassSchema;
 var Class = db.model('classes', ClassSchema);
 
