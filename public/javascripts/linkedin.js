@@ -6,6 +6,7 @@
 function onLinkedInLoad() {
 	
 	IN.Event.on(IN, "auth", function() {
+		
 		angular.element(document.getElementById("listClass")).scope().$apply(
 				function($scope) {
 					$scope.getLinkedInUserDetails();
@@ -18,11 +19,7 @@ function onLinkedInLoad() {
 }
 
 //on logout 
-function onLinkedInLogout() {
-	angular.element(document.getElementById("listClass")).scope().$apply(
-			function($scope) {
-				$scope.logoutLinkedIn();
-			}
-		);
+function onLinkedInLogout() {	
+	location.reload(true);
 }
 

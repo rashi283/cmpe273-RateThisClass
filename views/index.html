@@ -24,26 +24,28 @@
 <script src="javascripts/services.js"></script>
 <script src="javascripts/rest.js"></script>
 <script src="javascripts/linkedin.js"></script>
-
-
 <body ng-controller="ClassListCtrl" id="listClass">
 
 	<nav role="navigation" class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-header">
-			<a href="#/classes" class="navbar-brand">RateThisClass</a>
+			<a href="#/classes" class="navbar-brand" style="color: white;">RateThisClass</a>
+		</div>
+		<div class="nav pull-right" ng-hide="!userLoggedIn" ng-model="debug">
+
+			<span class="navbar-text " style="color: white; font-size: 15px;"> Welcome <a
+				ng-href="{{userProfile.publicProfileUrl}}" target="_blank"
+				class="navbar-link" style="color: white; font-size: 15px;">{{userProfile.firstName}}
+					{{userProfile.lastName}}</a>
+			</span>
+			<button class="btn btn-mini btn-inverse" style="margin-top: 5px; margin-right: 5px;"
+				type="button" ng-click="logoutLinkedIn()">Logout</button>
+
 		</div>
 		<div class="nav pull-right" style="margin-top: 10px; zoom: 120%">
 
-			<script type="in/Login" ></script>
+			<script type="in/Login"></script>
 		</div>
-		<div class="nav-collapse collapse"  >
-					<div class="pull-right">
-						<span class="navbar-text ">
-	              			Welcome <a ng-href="{{userProfile.publicProfileUrl}}" target="_blank" class="navbar-link">{{userProfile.firstName}} {{userProfile.lastName}}</a>
-	            		</span>
-	            		<button class="btn btn-mini btn-inverse" style="margin-top:0px;" type="button" ng-click="logoutLinkedIn()">Logout</button>
-					</div>
-				</div>
+
 
 	</nav>
 
