@@ -12,8 +12,12 @@ html(lang='en',ng-app='ratethisclass')
       script(src='javascripts/app.js')
       script(src='javascripts/controllers.js')
       script(src='javascripts/services.js')
-      script(src='/javascripts/rest.js')                
-      body(ng-controller='ClassListCtrl')
+      script(type='text/javascript', src='http://platform.linkedin.com/in.js')
+        api_key: "75eug5skw9qgxq"
+        onLoad: onLinkedInLoad
+        authorize: true   
+      script(src='javascripts/rest.js')                     
+      body(ng-controller='ClassListCtrl')             
        nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
         div.navbar-header
            a.navbar-brand(href='#/classes')= title

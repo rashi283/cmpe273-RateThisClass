@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ratethisclass">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=no">
+<title>RateThisClass</title>
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/stylesheets/style.css">
+<script
+	src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+<script
+	src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-resource.min.js"></script>
+<script src="/socket.io/socket.io.js"> </script>
+
+<script type="text/javascript" src="http://platform.linkedin.com/in.js">
+      onLoad: onLinkedInLoad
+      api_key: 75eug5skw9qgxq      
+      authorize: true   
+    </script>
+<script src="javascripts/app.js"></script>
+<script src="javascripts/controllers.js"></script>
+<script src="javascripts/services.js"></script>
+<script src="javascripts/rest.js"></script>
+<script src="javascripts/linkedin.js"></script>
+<body ng-controller="ClassListCtrl" id="listClass">
+
+	<nav role="navigation" class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-header">
+			<a href="#/classes" class="navbar-brand" style="color: white;">RateThisClass</a>
+		</div>
+		<div class="nav pull-right" ng-hide="!userLoggedIn" ng-model="debug">
+
+			<span class="navbar-text " style="color: white; font-size: 15px;"> Welcome <a
+				ng-href="{{userProfile.publicProfileUrl}}" target="_blank"
+				class="navbar-link" style="color: white; font-size: 15px;">{{userProfile.firstName}}
+					{{userProfile.lastName}}</a>
+			</span>
+			<button class="btn btn-mini btn-inverse" style="margin-top: 5px; margin-right: 5px;"
+				type="button" ng-click="logoutLinkedIn()">Logout</button>
+
+		</div>
+		<div class="nav pull-right" style="margin-top: 10px; zoom: 120%">
+
+			<script type="in/Login"></script>
+		</div>
+
+
+	</nav>
+
+
+
+	<div class="container">
+
+		<div ng-view></div>
+	</div>
+</body>
+</head>
+</html>

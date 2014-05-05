@@ -1,7 +1,35 @@
 
 // Managing the class list
-function ClassListCtrl($scope, Class) {
+function ClassListCtrl($scope, Class, $rootScope) {
 	$scope.classes = Class.query();
+	
+	$scope.getLinkedInUserDetails = function() {
+		if(!$scope.hasOwnProperty("userProfile")){
+			
+			IN.API.Profile("me").fields(
+					[ "id", "firstName", "lastName", "pictureUrl",
+							"publicProfileUrl" ]).result(function(data) {
+				
+				console.log(data);
+				 $rootScope.$apply(function() {
+					var userProfile = data.values[0];
+					$rootScope.userProfile = userProfile;
+					$rootScope.userLoggedIn = true;				
+			    	
+				});
+			}).error(function(err) {
+				$scope.error = err;
+			});
+		}
+	};
+ 
+	$scope.logoutLinkedIn = function() {
+		console.log("inside logoutLinkedIn ");
+		IN.User.logout();
+		delete $rootScope.userProfile;
+		$rootScope.userLoggedIn = false;
+		
+	};
 }
 // View a class
 function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFactoryDel ) { 
