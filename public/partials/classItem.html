@@ -7,8 +7,8 @@
     <h4 style="text-align:justify;"><strong>Class: </strong>{{thisclass.className}} </h4>
     </div>
    <div class="col-xs-5">
-   <div ng-init="avgrating =3.5"></div>
-   <div class="col-xs-12,star-rating" ng-tooltip="3.5" star-rating rating-value="avgrating" data-max="5" readonly="true"></div>
+   <div ng-init="avgrating = star.rating+1"></div>
+   <div class="col-xs-12,star-rating" star-rating rating-value="thisclass.totalRating" data-max="5" readonly="true"></div>
    </div>
    </div>
    <h4 style="text-align:justify;"><strong>Professor: </strong>{{thisclass.professor}}</h4>
@@ -81,15 +81,16 @@
               <tr ng-repeat="item in thisclass.items">
                 <td>{{item.text}}</td>
                 <td>
-                  <table style="background-color: lightblue; width: {{item.rating.length/thisclass.totalRating*100}}%; text-align: right">
-                    <tr><td>{{item.rating.length}}</td></tr>
+                  <table style="background-color: lightblue; width: {{item.averageRating}}; text-align: right">
+                    <tr><td>{{item.averageRating}}</td></tr>
                   </table>
                 </td>
               </tr>
             </tbody>
           </table>  
-          <p><em>{{thisclass.totalRating}} rating counted so far. <span ng-show="thisclass.userItem">You rated for <strong>{{thisclass.userItem.text}}
-</strong>.</span></em></p>
+          <p><em><span ng-show="thisclass.userItem">You rated for <strong>{{thisclass.userItem.text}}</strong>.</span>
+          The total rating of the class is <strong>{{thisclass.totalRating}}</strong>. 
+          </em></p>
 </div>
           <p><hr></p>
           <div class="row">

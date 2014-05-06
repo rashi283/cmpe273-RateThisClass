@@ -4,13 +4,15 @@
 
 var mongoose = require('mongoose');
 var rateSchema = new mongoose.Schema({
-	ip : 'String'
+	ip : 'String',
+	rating_scale : Number
 });
 var itemSchema = new mongoose.Schema({
 	text : String,
 	//Shaji
 	category: String, //LAB, PROJECT, ASSIGNMENT etc
-	rating : [ rateSchema ]
+	rating : [ rateSchema ],
+	averageRating : Number
 });
 var commentSchema=new mongoose.Schema({
 	text:String
@@ -31,7 +33,8 @@ exports.ClassSchema = new mongoose.Schema({
 	},	
 	//Shaji
 	items : [ itemSchema ],
-	comments:[ commentSchema ]
+	comments:[ commentSchema ],
+	totalRating : Number
 });
 
 

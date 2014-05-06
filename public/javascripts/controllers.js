@@ -33,7 +33,7 @@ function ClassListCtrl($scope, Class, $rootScope) {
 }
 // View a class
 function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFactoryDel) { 
-	   $scope.rating = 5;
+	   //$scope.rating = 5;
  $scope.thisclass = Class.get({classId: $routeParams.classId});
  socket.on('myrate', function(data) {
    console.dir(data);
@@ -50,11 +50,9 @@ function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFa
  });
  $scope.rate = function() {
  	
- 	var rating = $scope.rating;
-   var classId = $scope.thisclass._id,
-       itemId = $scope.thisclass.userRate;
+ 	var classId = $scope.thisclass._id, itemId = $scope.thisclass.userRate, rating = $scope.rating;
    if(itemId) {
-     var rateObj = { class_id: classId, item: itemId };
+     var rateObj = { class_id: classId, item: itemId, rating: rating };
      socket.emit('send:rate', rateObj);
    } else {
      alert('You must select an option to rate for');

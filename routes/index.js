@@ -24,36 +24,66 @@ exports.list = function(req, res) {
 exports.thisclass = function(req, res) {
 	var classId = req.params.id;
 	Class.findById(classId, '', {lean : true}, function(err, thisclass) {
+		var userRated = false, userItem;
+		var class_rtng_sum = 0; var class_tot_rating = 0;
 		if (thisclass) 
 		{
-			var userRated = false, userItem, totalRating = 0;
 			for (i in thisclass.items) 
 			{
-				//var userRated = false, userItem, totalRating = 0;			
 				var item = thisclass.items[i];
+				var total_rate = 0, averageRating = 0;
 				console.log(item);
-				for (r in item.rating) 
+				if (item.rating.length > 0)
 				{
-					var rate = item.rating[r];
-					//console.log(rate);
-					totalRating++;
-					if(rate.ip === (req.header('x-forwarded-for') || req.ip)) 
-					{
-						userRated = true;
-						userItem = {_id: item._id, category: item.category, text: item.text};
-					}
-					
+					for (r in item.rating) 
+				    {
+						var rate = item.rating[r];
+						total_rate = total_rate + rate.rating_scale;
+				    }
+					averageRating = total_rate/item.rating.length;
+			        item.averageRating = averageRating;
+			        for (rat in item.rating)
+			        {
+			        	if(rat.ip === (req.header('x-forwarded-for') || req.ip) && (rat.rating_scale))
+			        	{
+							userRated = true;
+							userItem = {_id: item._id, category: item.category, text: item.text, rating: rat.rating_scale, averageRating: item.averageRating };
+			        	}
+			        }
+				}//end of if
+				else
+				{
+					userRated = false;
+					userItem = {_id: item._id, category: item.category, text: item.text, rating: item.rating.rating_scale, averageRating: item.averageRating };
 				}
-				//item.userRated = userRated;
-				//item.userItem = userItem;
-				//item.totalRating = totalRating;
-				//console.log(item.userRated);
+				item.userRated = userRated;
+				item.userItem = userItem;
+				console.log(item.userRated);
+				console.log(item.userItem);
 				
 			}
+			
+			for (i in thisclass.items) 
+			{
+				var item = thisclass.items[i];
+				var total_rate = 0, averageRating = 0;
+				if (item.rating.length > 0)
+				{
+					for (r in item.rating) 
+				    {
+						var rate = item.rating[r];
+						total_rate = total_rate + rate.rating_scale;
+				    }
+					averageRating = total_rate/item.rating.length;
+			        item.averageRating = Math.round(averageRating*100)/100;
+				}
+				class_rtng_sum = class_rtng_sum + item.averageRating;
+			}
+			class_tot_rating = class_rtng_sum/thisclass.items.length;
 			thisclass.userRated = userRated;
-			thisclass.userItem = userItem;
-			thisclass.totalRating = totalRating;
-									
+			thisclass.totalRating = Math.round(class_tot_rating*100)/100;
+			
+											
 			res.json(thisclass);
 		} else {
 			res.json({
@@ -88,25 +118,56 @@ exports.rate = function(socket) {
     var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;    
     Class.findById(data.class_id, function(err, thisclass) {
       var item = thisclass.items.id(data.item);
-      item.rating.push({ ip: ip });      
+      item.rating.push({ ip: ip, rating_scale: data.rating });     
       thisclass.save(function(err, doc) {
         var theDoc = { 
           className: doc.className, professor: doc.professor, session: doc.session, _id: doc._id, items: doc.items, 
-          userRated: false, totalRating: 0 
+          totalRating: 0 
         };
+        var class_rating_sum = 0; var class_total_rating = 0;
         for(var i = 0, ln = doc.items.length; i < ln; i++) {
-          var item = doc.items[i]; 
+          var item = doc.items[i];
+          console.log("..............................................");
+          console.log(item);
+          var sum_rate = 0, averageRating = 0;
           for(var j = 0, jLn = item.rating.length; j < jLn; j++) {
-            var rate = item.rating[j];
-            theDoc.totalRating++;
-            theDoc.ip = ip;
-            if(rate.ip === ip) {
-              theDoc.userRated = true;
-              theDoc.userItem = { _id: item._id, category: item.category, text: item.text };
-             
-            }
+        	  var rating_arr_element = item.rating[j];
+        	  sum_rate = sum_rate + rating_arr_element.rating_scale; 
           }
-        }       
+          averageRating = sum_rate/item.rating.length;
+          item.averageRating = Math.round(averageRating*100)/100;
+          //console.log(averageRating);
+          
+          for(var k = 0, kLn = item.rating.length; k < kLn; k++) 
+          {
+        	 var rating_array = item.rating[k];
+        	 theDoc.ip = ip; //has to change to user account.
+            if((rating_array.ip === ip) && (rating_array.rating_scale)) 
+            {
+            	theDoc.userRated = true;
+	            theDoc.userItem = { _id: item._id, category: item.category, text: item.text, rating: rating_array.rating_scale, averageRating: item.averageRating};
+            }
+            
+          }
+          if(item.averageRating)
+    	  {
+        	  class_rating_sum = class_rating_sum + item.averageRating;
+    	  }
+          else
+    	  {
+        	  item.averageRating = 0;
+        	  class_rating_sum = class_rating_sum + item.averageRating;
+    	  }
+        }      
+        
+        class_total_rating =  class_rating_sum/doc.items.length;
+        theDoc.totalRating = Math.round(class_total_rating*100)/100;
+        //console.log("-------------------------------------");
+        //console.log(theDoc.totalRating);
+        //console.log("============================");
+        //console.log(theDoc);
+        //console.log("============================");
+        
         socket.emit('myrate', theDoc);
         socket.broadcast.emit('rate', theDoc);
       });     
