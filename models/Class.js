@@ -12,7 +12,6 @@ var itemSchema = new mongoose.Schema({
 	category: String, //LAB, PROJECT, ASSIGNMENT etc
 	rating : [ rateSchema ]
 });
-
 var commentSchema=new mongoose.Schema({
 	text:String
 });

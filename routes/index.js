@@ -9,8 +9,8 @@ exports.index = function(req, res) {
 };
 var mongoose = require('mongoose');
 //var db = mongoose.createConnection('localhost', 'ratethisclass');
-//var db = mongoose.connect('mongodb://localhost/test');
-var db = mongoose.connect('mongodb://shaji:shaji@ds053658.mongolab.com:53658/ratethisclass');
+var db = mongoose.connect('mongodb://localhost/test');
+//var db = mongoose.connect('mongodb://shaji:shaji@ds053658.mongolab.com:53658/ratethisclass');
 var ClassSchema = require('../models/Class.js').ClassSchema;
 var Class = db.model('classes', ClassSchema);
 
@@ -154,5 +154,27 @@ exports.del = function(req, res){
 	});	
 };
 //Rashi
+
+exports.addComment=function(req,res){
+	console.log("hi i am here");
+	var reqBody = req.body;
+	console.log(reqBody);
+	var classId=req.params.id;
+	Class.findById(classId, '', {
+		lean : true
+	}, function(err, thisclass) {
+		if (thisclass) {
+			
+			//Class.update({ '_id' : classId}, {$set:reqBody}, function(err, result){
+			Class.update({ '_id' : classId}, {$push:{comments:reqBody}}, function(err, result){
+				if (err || !result) {
+					throw 'Error';
+				} else {
+					res.json(result);
+				}
+	            });
+		}
+	});	
+};
 
 

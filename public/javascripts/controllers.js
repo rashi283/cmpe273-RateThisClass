@@ -32,42 +32,34 @@ function ClassListCtrl($scope, Class, $rootScope) {
 	};
 }
 // View a class
-function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFactoryDel ) { 
-	
-    $scope.thisclass = Class.get({classId: $routeParams.classId});
-    $scope.rating = 5;
-    socket.on('myrate', function(data) {
-      console.dir(data);
-      if(data._id === $routeParams.classId) {
-        $scope.thisclass = data;
-      }
-    });
-    socket.on('rate', function(data) {
-      console.dir(data);
-      if(data._id === $routeParams.classId) {
-        $scope.thisclass.items = data.items;
-        $scope.thisclass.totalRating = data.totalRating;
-      }   
-    });
-    $scope.rate = function() {
-    	
-    	var rating = $scope.rating;
-      var classId = $scope.thisclass._id,
-          itemId = $scope.thisclass.userRate;
-      if(itemId) {
-        var rateObj = { class_id: classId, item: itemId };
-        socket.emit('send:rate', rateObj);
-      } else {
-        alert('You must select an option to rate for');
-      }
-    };
-    
-    
-    $scope.rateFunction = function(rating) {
-    	 $scope.rating=rating;
-        alert('Rating selected - ' + rating);
-        return rating;
-      };
+function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFactoryDel) { 
+	   $scope.rating = 5;
+ $scope.thisclass = Class.get({classId: $routeParams.classId});
+ socket.on('myrate', function(data) {
+   console.dir(data);
+   if(data._id === $routeParams.classId) {
+     $scope.thisclass = data;
+   }
+ });
+ socket.on('rate', function(data) {
+   console.dir(data);
+   if(data._id === $routeParams.classId) {
+     $scope.thisclass.items = data.items;
+     $scope.thisclass.totalRating = data.totalRating;
+   }   
+ });
+ $scope.rate = function() {
+ 	
+ 	var rating = $scope.rating;
+   var classId = $scope.thisclass._id,
+       itemId = $scope.thisclass.userRate;
+   if(itemId) {
+     var rateObj = { class_id: classId, item: itemId };
+     socket.emit('send:rate', rateObj);
+   } else {
+     alert('You must select an option to rate for');
+   }
+ };
 $scope.addItem = function() {
 		
 		var category=$scope.thisclass.items.category;
@@ -84,36 +76,42 @@ $scope.addItem = function() {
 		alert('Category and Text cannot be blank');
 	}
 	
-	};
-	
-	$scope.addComment = function(){
-		
-		var comment=$scope.thisclass.comments.text;
-		if(comment!=null){
-			var commentObj={text:comment};
-			/*$scope.thisclass.comments=commentObj;
-			*/
-			//$scope.thisclass.addComment({ classId :$routeParams.classId});
-			$scope.thisclass.comments.push(commentObj);
-			ClassFactoryDel.addComment({ classId :$routeParams.classId},commentObj);
-			
-		}else{
-			alert('Add a comment');
-		}
-		
-	};
+	};	
 //Rashi
 	$scope.delItem = function() {
 		var clsId = $scope.thisclass._id;
 		ClassFactoryDel.del({ classId : clsId});
-		window.location.assign('#/classes');
 	};
 //Rashi
-  }
 
-function clearContents(element) {
-	  element.value = '';
+
+$scope.addComment = function(){
+	
+	var comment=$scope.thisclass.comments.text;
+	if(comment!=null){
+		var commentObj={text:comment};
+		/*$scope.thisclass.comments=commentObj;
+		*/
+		//$scope.thisclass.addComment({ classId :$routeParams.classId});
+		$scope.thisclass.comments.push(commentObj);
+		ClassFactoryDel.addComment({ classId :$routeParams.classId},commentObj);
+		
+	}else{
+		alert('Add a comment');
 	}
+	
+};
+
+	$scope.clearContents=function(element){
+	  element.value = '';
+	};
+	
+	 $scope.rateFunction = function(rating) {
+ 	 $scope.rating=rating;
+     alert('Rating selected - ' + rating);
+     return rating;
+   };	
+}
 
 // Creating a new class
 function ClassNewCtrl($scope, $location, Class) {
