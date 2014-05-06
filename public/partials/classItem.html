@@ -26,7 +26,7 @@
 				     </label>
 				 </div>
 				 <div class="col-xs-5" align="left">
-				     <button class="btn btn-primary pull-left" type="submit" style="width:75px; height:35px;">Rate &raquo;</button>
+				     <button class="btn btn-primary pull-left" ng-disabled="!userLoggedIn" type="submit" style="width:75px; height:35px;">Rate &raquo;</button>
 			     </div>
 			     
 			       <div ng-init="rating = star.rating + 1"></div>
@@ -49,7 +49,7 @@
                <input type="text" ng-model="thisclass.items.text" class="form-control" placeholder="Enter item text"><br>
             </div>
             <div class="col-xs-12"> 
-                <button class="btn btn-primary pull-right" type="submit" style="width:100px; height:30px;" ng-click="addItem()">Add item &raquo;</button>
+                <button class="btn btn-primary pull-right" ng-disabled="!userLoggedIn" type="submit" style="width:100px; height:30px;" ng-click="addItem()">Add item &raquo;</button>
             </div>
             <div class="row" >
           <div class="col-xs-5" align="left" >
@@ -59,7 +59,7 @@
            <textarea rows="4" cols="50" ng-model="thisclass.comments.text" class="form-control" placeholder="Enter comments for class" onfocus="clearContents(this);"></textarea>
            </div>
             <div class="col-xs-12"> 
-                <button class="btn btn-primary pull-right" type="submit" style="width:100px; height:30px;" ng-click="addComment()">Add Comments &raquo;</button>
+                <button class="btn btn-primary pull-right" ng-disabled="!userLoggedIn" type="submit" style="width:100px; height:30px;" ng-click="addComment()">Add Comments &raquo;</button>
             </div>
              
           </div>
@@ -96,7 +96,7 @@
           <div class="row">
             <div class="col-xs-6">
             <!-- Rashi -->
-               <a ng-click="delItem()" class="btn btn-small btn-danger">Delete Class</a>
+               <a ng-click="delItem()" class="btn btn-small btn-danger" ng-disabled="!userLoggedIn">Delete Class</a>
              <!-- Rashi -->  
                <a href="#/classes" class="btn btn-default" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Back to Class List</a>
             </div>
