@@ -81,6 +81,7 @@ $scope.addItem = function() {
 	$scope.delItem = function() {
 		var clsId = $scope.thisclass._id;
 		ClassFactoryDel.del({ classId : clsId});
+		window.location.assign('#/classes');
 	};
 //Rashi
 
