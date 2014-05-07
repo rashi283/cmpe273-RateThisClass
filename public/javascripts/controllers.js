@@ -33,8 +33,7 @@ function ClassListCtrl($scope, Class, $rootScope) {
 }
 // View a class
 function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFactoryDel) { 
-	   //$scope.rating = 5;
- $scope.thisclass = Class.get({classId: $routeParams.classId});
+	 $scope.thisclass = Class.get({classId: $routeParams.classId});
  socket.on('myrate', function(data) {
    console.dir(data);
    if(data._id === $routeParams.classId) {

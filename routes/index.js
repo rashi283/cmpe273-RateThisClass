@@ -32,7 +32,6 @@ exports.thisclass = function(req, res) {
 			{
 				var item = thisclass.items[i];
 				var total_rate = 0, averageRating = 0;
-				console.log(item);
 				if (item.rating.length > 0)
 				{
 					for (r in item.rating) 
@@ -44,10 +43,11 @@ exports.thisclass = function(req, res) {
 			        item.averageRating = averageRating;
 			        for (rat in item.rating)
 			        {
-			        	if(rat.ip === (req.header('x-forwarded-for') || req.ip) && (rat.rating_scale))
+			        	var rte = item.rating[rat];
+			        	if(rte.ip === (req.header('x-forwarded-for') || req.ip) && (rte.rating_scale))
 			        	{
 							userRated = true;
-							userItem = {_id: item._id, category: item.category, text: item.text, rating: rat.rating_scale, averageRating: item.averageRating };
+							userItem = {_id: item._id, category: item.category, text: item.text, rating: rte.rating_scale, averageRating: item.averageRating };
 			        	}
 			        }
 				}//end of if
@@ -58,9 +58,6 @@ exports.thisclass = function(req, res) {
 				}
 				item.userRated = userRated;
 				item.userItem = userItem;
-				console.log(item.userRated);
-				console.log(item.userItem);
-				
 			}
 			
 			for (i in thisclass.items) 
@@ -135,13 +132,11 @@ exports.rate = function(socket) {
         	  sum_rate = sum_rate + rating_arr_element.rating_scale; 
           }
           averageRating = sum_rate/item.rating.length;
-          item.averageRating = Math.round(averageRating*100)/100;
-          //console.log(averageRating);
-          
+          item.averageRating = Math.round(averageRating*100)/100;     
           for(var k = 0, kLn = item.rating.length; k < kLn; k++) 
           {
         	 var rating_array = item.rating[k];
-        	 theDoc.ip = ip; //has to change to user account.
+        	 theDoc.ip = ip;
             if((rating_array.ip === ip) && (rating_array.rating_scale)) 
             {
             	theDoc.userRated = true;
@@ -162,11 +157,9 @@ exports.rate = function(socket) {
         
         class_total_rating =  class_rating_sum/doc.items.length;
         theDoc.totalRating = Math.round(class_total_rating*100)/100;
-        //console.log("-------------------------------------");
-        //console.log(theDoc.totalRating);
-        //console.log("============================");
-        //console.log(theDoc);
-        //console.log("============================");
+        console.log("============================");
+        console.log(theDoc);
+        console.log("============================");
         
         socket.emit('myrate', theDoc);
         socket.broadcast.emit('rate', theDoc);
