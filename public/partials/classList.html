@@ -38,7 +38,7 @@ glyphicon-plus"></span> New Class</a>
 	
 			<ul ng-switch-default>
 				<li ng-repeat="thisclass in classes | filter:query">
-			<a href="#/class/{{thisclass._id}}">{{thisclass.className}}</a></li>
+			<a href="#/class/{{thisclass._id}}?user={{userProfile.id}}">{{thisclass.className}}</a></li>
 			</ul>
 		</div>
 		</td>
