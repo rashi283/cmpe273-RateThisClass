@@ -34,7 +34,7 @@ function ClassListCtrl($scope, Class, $rootScope) {
 // View a class
 function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFactoryDel) { 
 	 $scope.thisclass = Class.get({classId: $routeParams.classId});
- socket.on('myrate', function(data) {
+ socket.on('self_rate', function(data) {
    console.dir(data);
    if(data._id === $routeParams.classId) {
      $scope.thisclass = data;

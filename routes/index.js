@@ -25,8 +25,9 @@ exports.thisclass = function(req, res) {
 	var classId = req.params.id;
 	var userId = req.query.user;
 	Class.findById(classId, '', {lean : true}, function(err, thisclass) {
-		var userRated = false, userItem;
+		var userRated = false, userItem, classRated = true;
 		var class_rtng_sum = 0; var class_tot_rating = 0;
+		var rated_item = 0;
 		if (thisclass) 
 		{
 			for (i in thisclass.items) 
@@ -45,8 +46,12 @@ exports.thisclass = function(req, res) {
 			        for (rat in item.rating)
 			        {
 			        	var rte = item.rating[rat];
+			        	console.log(rte.user);
+			        	console.log(rte.rating_scale);
+			        	console.log(userId);
 			        	if(userId && (rte.user === userId) && (rte.rating_scale))
 			        	{
+			        		console.log("After checking user id... Entering the loop");
 							userRated = true;
 							userItem = {_id: item._id, category: item.category, text: item.text, rating: rte.rating_scale, averageRating: item.averageRating };
 			        	}
@@ -59,29 +64,44 @@ exports.thisclass = function(req, res) {
 				}
 				item.userRated = userRated;
 				item.userItem = userItem;
+				console.log("===================");
+				console.log(item.userRated);
+				console.log("===================");
 			}
 			
 			for (i in thisclass.items) 
 			{
 				var item = thisclass.items[i];
-				var total_rate = 0, averageRating = 0;
-				if (item.rating.length > 0)
+				if(item.userRated) 
 				{
-					for (r in item.rating) 
-				    {
-						var rate = item.rating[r];
+					var total_rate = 0, averageRating = 0;
+					rated_item++; 
+					for(var count = 0; count < item.rating.length; count++)
+					{
+						var rate = item.rating[count];
 						total_rate = total_rate + rate.rating_scale;
 				    }
 					averageRating = total_rate/item.rating.length;
 			        item.averageRating = Math.round(averageRating*100)/100;
+			        class_rtng_sum = class_rtng_sum + item.averageRating;
 				}
-				class_rtng_sum = class_rtng_sum + item.averageRating;
+				
 			}
-			class_tot_rating = class_rtng_sum/thisclass.items.length;
-			thisclass.userRated = userRated;
+			class_tot_rating = class_rtng_sum/rated_item;
+			for(a in thisclass.items)
+			{
+				var get_item = thisclass.items[a];
+				if(get_item.userRated == false)
+				{
+					classRated = false;
+					break;
+				}
+				
+			}
+			thisclass.userRated = classRated;
+			//console.log("-------------All items rated?------------");
+			console.log(thisclass.userRated);
 			thisclass.totalRating = Math.round(class_tot_rating*100)/100;
-			
-											
 			res.json(thisclass);
 		} else {
 			res.json({
@@ -116,37 +136,52 @@ exports.rate = function(socket) {
     var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;    
     Class.findById(data.class_id, function(err, thisclass) {
       var item = thisclass.items.id(data.item);
-      item.rating.push({ ip: ip, rating_scale: data.rating, user: data.user });     
+      item.rating.push({ ip: ip, rating_scale: data.rating, user: data.user }); 
+      var class_rating_sum = 0; var class_total_rating = 0, item_rated = 0;
+      
       thisclass.save(function(err, doc) {
-        var theDoc = { 
+        var class_doc = { 
           className: doc.className, professor: doc.professor, session: doc.session, _id: doc._id, items: doc.items, 
           totalRating: 0 
         };
-        var class_rating_sum = 0; var class_total_rating = 0;
+                
         for(var i = 0, ln = doc.items.length; i < ln; i++) {
+        	
           var item = doc.items[i];
           console.log("..............................................");
           console.log(item);
-          var sum_rate = 0, averageRating = 0;
+          var sum_rate = 0, averageRating = 0; 
+          if(item.rating.length > 0)
+          {
           for(var j = 0, jLn = item.rating.length; j < jLn; j++) {
         	  var rating_arr_element = item.rating[j];
         	  sum_rate = sum_rate + rating_arr_element.rating_scale; 
           }
           averageRating = sum_rate/item.rating.length;
-          item.averageRating = Math.round(averageRating*100)/100;     
+          item.averageRating = Math.round(averageRating*100)/100; 
+          console.log("-------------Item's average rating.........");
+          console.log(item.averageRating);
+          class_doc.items[i].averageRating = item.averageRating;
+          doc.items[i].averageRating = item.averageRating;
+          }//end of if
+          /*else
+        	  {
+        	  	item.averageRating = 0;
+        	  }*/
           for(var k = 0, kLn = item.rating.length; k < kLn; k++) 
           {
         	 var rating_array = item.rating[k];
-        	 theDoc.ip = ip;
+        	 class_doc.ip = ip;
             if((rating_array.ip === ip) && (rating_array.rating_scale)) 
             {
-            	theDoc.userRated = true;
-	            theDoc.userItem = { _id: item._id, category: item.category, text: item.text, rating: rating_array.rating_scale, averageRating: item.averageRating};
+            	class_doc.userRated = true;
+	            class_doc.userItem = { _id: item._id, category: item.category, text: item.text, rating: rating_array.rating_scale, averageRating: item.averageRating};
             }
             
           }
           if(item.averageRating)
     	  {
+        	  item_rated++;
         	  class_rating_sum = class_rating_sum + item.averageRating;
     	  }
           else
@@ -154,16 +189,25 @@ exports.rate = function(socket) {
         	  item.averageRating = 0;
         	  class_rating_sum = class_rating_sum + item.averageRating;
     	  }
-        }      
-        
-        class_total_rating =  class_rating_sum/doc.items.length;
-        theDoc.totalRating = Math.round(class_total_rating*100)/100;
-        console.log("============================");
-        console.log(theDoc);
-        console.log("============================");
-        
-        socket.emit('myrate', theDoc);
-        socket.broadcast.emit('rate', theDoc);
+        } 
+        console.log("Items that were rated: ", item_rated);
+        class_total_rating =  class_rating_sum/item_rated;
+        class_doc.totalRating = Math.round(class_total_rating*100)/100;
+        console.log("----------------Class's Total Rating---------------");
+        console.log(class_doc.totalRating);
+        doc.totalRating = class_doc.totalRating; 
+        //console.log("============================");
+        //console.log(class_doc);
+        //console.log("============================");
+        doc.save(function(err, result) {
+      	  if(result){
+      	  console.log("Database updated with total Rating");
+      	  }else{
+      	  console.log(err);
+      	  }
+      	  });
+        socket.emit('self_rate', class_doc);
+        socket.broadcast.emit('rate', class_doc);
       });     
     });
   });
