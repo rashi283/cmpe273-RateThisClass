@@ -71,7 +71,7 @@ $scope.addItem = function() {
 				}; 
 			$scope.thisclass.items.push(item);
 			ClassFactory.update({ classId :$routeParams.classId},item);
-		
+			$scope.thisclass = Class.get({classId: $routeParams.classId});
 	}else{
 		alert('Category and Text cannot be blank');
 	}
@@ -109,7 +109,6 @@ $scope.addComment = function(){
 	
 	 $scope.rateFunction = function(rating) {
  	 $scope.rating=rating;
-     alert('Rating selected - ' + rating);
      return rating;
    };	
 }
