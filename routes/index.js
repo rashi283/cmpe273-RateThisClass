@@ -9,10 +9,18 @@ exports.index = function(req, res) {
 };
 var mongoose = require('mongoose');
 //var db = mongoose.createConnection('localhost', 'ratethisclass');
-var db = mongoose.connect('mongodb://localhost/test');
-//var db = mongoose.connect('mongodb://shaji:shaji@ds053658.mongolab.com:53658/ratethisclass');
+//var db = mongoose.connect('mongodb://localhost/test');
+var db = mongoose.connect('mongodb://shaji:shaji@ds053658.mongolab.com:53658/ratethisclass');
 var ClassSchema = require('../models/Class.js').ClassSchema;
 var Class = db.model('classes', ClassSchema);
+
+//aws ses
+var aws = require('aws-sdk');
+aws.config.loadFromPath('config.json');
+var ses = new aws.SES({apiVersion: '2010-12-01'});
+//verified email id for admin
+var to = ['ratethisclass@gmail.com'];
+var from = 'ratethisclass@gmail.com';
 
 // JSON API for list of classes
 exports.list = function(req, res) {
@@ -128,6 +136,25 @@ exports.create = function(req, res) {
 		if (err || !doc) {
 			throw 'Error';
 		} else {
+			ses.sendEmail( { 
+				   Source: from, 
+				   Destination: { ToAddresses: to },
+				   Message: {
+				       Subject: {
+				          Data: 'A New Class created - notification from RateThisClass'
+				       },
+				       Body: {
+				           Text: {
+				               Data: 'Hello Admin,\nA new class with class name:'+thisclass.className+ ' has been created!.\nPlease make sure that the class '+thisclass.className+' taught by '+thisclass.professor+' exists in Session '+thisclass.session+". Thank you!",
+				           }
+				        }
+				   }
+				}
+				, function(err, data) {
+				    if(err) console.log(err);
+				        console.log('Email sent:');
+				        console.log(data);
+				 });
 			res.json(doc);
 		}
 	});
@@ -230,7 +257,7 @@ exports.update=function(req,res){
 			Class.update({ '_id' : classId}, {$push:{items:reqBody}}, function(err, result){
 				if (err || !result) {
 					throw 'Error';
-				} else {
+				} else {					
 					res.json(result);
 				}
 	            });
