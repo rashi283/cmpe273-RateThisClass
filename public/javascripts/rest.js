@@ -41,18 +41,17 @@ angular.module('restModule') .directive('starRating',
 				 + '\u2605'
 				 + '</li>'
 				 + '</ul>',
-		scope : {
-			ratingValue : '=',
-			max : '=',
-			onRatingSelected : '&',
-			readonly: '@',
-			onpageload:'@',
-			average:'='
+		
+			scope : {
+				ratingValue : '=',
+				max : '=',
+				onRatingSelected : '&',
+				readonly: '@',
+				avgRatingValue:'='
+			
 		},
 		link : function(scope, elem, attrs) {
 		
-			
-			
 			var updateStars = function() {
 				scope.stars = [];
 				for ( var i = 0; i < scope.max; i++) {
@@ -74,17 +73,17 @@ angular.module('restModule') .directive('starRating',
 				});
 			};
 			
-			scope.updateAverageStars=function(value){
-				if(value>0){
-					var roundValue=Math.round(value);
-					scope.stars = [];
-					for ( var i = 0; i < 5; i++) {
-						scope.stars.push({
-							filled : i < roundValue
-						});
-					}
+var updateAverageStars=function(){
+				
+				//var roundValue=Math.round(value);
+				scope.stars = [];
+				for ( var i = 0; i < 5; i++) {
+					scope.stars.push({
+						filled : i < scope.avgRatingValue-1
+					});
 				}
-			};
+			
+		};
 			
 			scope.$watch('ratingValue',
 				function(oldVal, newVal) {
@@ -93,6 +92,14 @@ angular.module('restModule') .directive('starRating',
 					}
 				}
 			);
+			
+			scope.$watch('avgRatingValue',
+					function(oldVal, newVal) {
+						if (newVal) {
+							updateAverageStars();
+						}
+					}
+				);
 		}
 	};
 }

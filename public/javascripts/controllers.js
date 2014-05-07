@@ -38,6 +38,7 @@ function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFa
    console.dir(data);
    if(data._id === $routeParams.classId) {
      $scope.thisclass = data;
+     $scope.thisclass.totalRating = data.totalRating;
    }
  });
  socket.on('rate', function(data) {

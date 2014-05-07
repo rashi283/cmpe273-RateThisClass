@@ -6,10 +6,10 @@
     <div class="col-xs-5">
     <h4 style="text-align:justify;"><strong>Class: </strong>{{thisclass.className}} </h4>
     </div>
-   <div class="col-xs-5">
-   <div ng-init="avgrating = star.rating+1"></div>
-   <div class="col-xs-12,star-rating" star-rating rating-value="thisclass.totalRating" data-max="5" readonly="true"></div>
+    <div class="col-xs-5">
+   <div ng-model="thisclass.totalRating"  class="col-xs-12,star-rating"  star-rating avg-rating-value="thisclass.totalRating +1" data-max="5" readonly="true"></div>
    </div>
+   
    </div>
    <h4 style="text-align:justify;"><strong>Professor: </strong>{{thisclass.professor}}</h4>
    <h4 style="text-align:justify;"><strong>Session: </strong>{{thisclass.session}}</h4>
@@ -26,11 +26,12 @@
 				         <input type="radio" name="item" ng-model="thisclass.userRate" value="{{item._id}}" style="font-size:30px;">
 				                {{item.text}}
 				     </label>
+				     <span class="badge badge-success">{{item.averageRating}}</span>
 				 </div>
 				 <div ng-init="rating = star.rating + 1"></div>
                  <div class="col-xs-12,star-rating" star-rating rating-value="rating" data-max="5" on-rating-selected="rateFunction(rating)" ></div>
 				 <div class="col-xs-5" align="right">
-				     <button class="btn btn-primary pull-right" ng-disabled="!userLoggedIn" type="submit" style="width:75px; height:35px;">Rate &raquo;</button>
+				     <button class="btn btn-primary pull-right" ng-disabled="userRated" type="submit" style="width:75px; height:35px;">Rate &raquo;</button>
 			     </div>
 			     
 			       

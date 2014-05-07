@@ -24,6 +24,7 @@ exports.list = function(req, res) {
 exports.thisclass = function(req, res) {
 	var classId = req.params.id;
 	var userId = req.query.user;
+	console.log("************"+userId);
 	Class.findById(classId, '', {lean : true}, function(err, thisclass) {
 		var userRated = false, userItem, classRated = true;
 		var class_rtng_sum = 0; var class_tot_rating = 0;
@@ -49,7 +50,7 @@ exports.thisclass = function(req, res) {
 			        	console.log(rte.user);
 			        	console.log(rte.rating_scale);
 			        	console.log(userId);
-			        	if(userId && (rte.user === userId) && (rte.rating_scale))
+			        	if(rte.ip === (req.header('x-forwarded-for') || req.ip) && (rte.rating_scale))
 			        	{
 			        		console.log("After checking user id... Entering the loop");
 							userRated = true;
@@ -87,6 +88,7 @@ exports.thisclass = function(req, res) {
 				}
 				
 			}
+			console.log("rated item "+rated_item);
 			class_tot_rating = class_rtng_sum/rated_item;
 			for(a in thisclass.items)
 			{
@@ -99,9 +101,10 @@ exports.thisclass = function(req, res) {
 				
 			}
 			thisclass.userRated = classRated;
-			//console.log("-------------All items rated?------------");
+			console.log("-------------total rating whioofofofo------------");
 			console.log(thisclass.userRated);
 			thisclass.totalRating = Math.round(class_tot_rating*100)/100;
+			console.log(thisclass.totalRating);
 			res.json(thisclass);
 		} else {
 			res.json({
