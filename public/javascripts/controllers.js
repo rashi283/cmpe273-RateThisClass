@@ -49,9 +49,11 @@ function ClassItemCtrl($scope, $routeParams, socket, Class,ClassFactory, ClassFa
  });
  $scope.rate = function() {
  	
- 	var classId = $scope.thisclass._id, itemId = $scope.thisclass.userRate, rating = $scope.rating;
+  var classId = $scope.thisclass._id, itemId = $scope.thisclass.userRate, rating = $scope.rating;
+ 	
    if(itemId) {
-     var rateObj = { class_id: classId, item: itemId, rating: rating };
+     var rateObj = { class_id: classId, item: itemId, rating: rating, user:$scope.userProfile.id};
+     
      socket.emit('send:rate', rateObj);
    } else {
      alert('You must select an option to rate for');

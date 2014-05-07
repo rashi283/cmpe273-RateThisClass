@@ -5,7 +5,8 @@
 var mongoose = require('mongoose');
 var rateSchema = new mongoose.Schema({
 	ip : 'String',
-	rating_scale : Number
+	rating_scale : Number,
+	user: 'String'
 });
 var itemSchema = new mongoose.Schema({
 	text : String,

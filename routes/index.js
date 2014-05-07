@@ -23,6 +23,7 @@ exports.list = function(req, res) {
 // JSON API for getting a single class
 exports.thisclass = function(req, res) {
 	var classId = req.params.id;
+	var userId = req.query.user;
 	Class.findById(classId, '', {lean : true}, function(err, thisclass) {
 		var userRated = false, userItem;
 		var class_rtng_sum = 0; var class_tot_rating = 0;
@@ -44,7 +45,7 @@ exports.thisclass = function(req, res) {
 			        for (rat in item.rating)
 			        {
 			        	var rte = item.rating[rat];
-			        	if(rte.ip === (req.header('x-forwarded-for') || req.ip) && (rte.rating_scale))
+			        	if(userId && (rte.user === userId) && (rte.rating_scale))
 			        	{
 							userRated = true;
 							userItem = {_id: item._id, category: item.category, text: item.text, rating: rte.rating_scale, averageRating: item.averageRating };
@@ -115,7 +116,7 @@ exports.rate = function(socket) {
     var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;    
     Class.findById(data.class_id, function(err, thisclass) {
       var item = thisclass.items.id(data.item);
-      item.rating.push({ ip: ip, rating_scale: data.rating });     
+      item.rating.push({ ip: ip, rating_scale: data.rating, user: data.user });     
       thisclass.save(function(err, doc) {
         var theDoc = { 
           className: doc.className, professor: doc.professor, session: doc.session, _id: doc._id, items: doc.items, 
