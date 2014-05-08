@@ -15,13 +15,14 @@ var ClassSchema = require('../models/Class.js').ClassSchema;
 var Class = db.model('classes', ClassSchema);
 
 //aws ses
+/*
 var aws = require('aws-sdk');
 aws.config.loadFromPath('config.json');
 var ses = new aws.SES({apiVersion: '2010-12-01'});
 //verified email id for admin
 var to = ['ratethisclass@gmail.com'];
 var from = 'ratethisclass@gmail.com';
-
+*/
 // JSON API for list of classes
 exports.list = function(req, res) {
 	Class.find({}, 'className', function(error, classes) {
@@ -136,7 +137,7 @@ exports.create = function(req, res) {
 		if (err || !doc) {
 			throw 'Error';
 		} else {
-			ses.sendEmail( { 
+			/*ses.sendEmail( { 
 				   Source: from, 
 				   Destination: { ToAddresses: to },
 				   Message: {
@@ -154,7 +155,7 @@ exports.create = function(req, res) {
 				    if(err) console.log(err);
 				        console.log('Email sent:');
 				        console.log(data);
-				 });
+				 }); */
 			res.json(doc);
 		}
 	});
