@@ -37,7 +37,7 @@ angular.module('restModule') .directive('starRating',
 	return {
 		restrict : 'A',
 		template : '<ul class="rating">'
-				 + '	<li ng-repeat="star in stars" ng-class="star" ng-click="toggle($index)">'
+				 + '	<li ng-repeat="star in stars" ng-class="star" ng-click="change($index)">'
 				 + '\u2605'
 				 + '</li>'
 				 + '</ul>',
@@ -50,9 +50,9 @@ angular.module('restModule') .directive('starRating',
 				avgRatingValue:'='
 			
 		},
-		link : function(scope, elem, attrs) {
+		link : function(scope, element, attrs) {
 		
-			var updateStars = function() {
+			var updateStarRating = function() {
 				scope.stars = [];
 				for ( var i = 0; i < scope.max; i++) {
 					scope.stars.push({
@@ -63,7 +63,7 @@ angular.module('restModule') .directive('starRating',
 			
 			
 			
-			scope.toggle = function(index) {
+			scope.change = function(index) {
 				if (scope.readonly && scope.readonly === 'true') {
 		            return;
 		          }
@@ -73,9 +73,7 @@ angular.module('restModule') .directive('starRating',
 				});
 			};
 			
-var updateAverageStars=function(){
-				
-				//var roundValue=Math.round(value);
+                var updateAverageStars=function(){
 				scope.stars = [];
 				for ( var i = 0; i < 5; i++) {
 					scope.stars.push({
@@ -86,16 +84,16 @@ var updateAverageStars=function(){
 		};
 			
 			scope.$watch('ratingValue',
-				function(oldVal, newVal) {
-					if (newVal) {
-						updateStars();
+				function(oldValue, newValue) {
+					if (newValue) {
+						updateStarRating();
 					}
 				}
 			);
 			
 			scope.$watch('avgRatingValue',
-					function(oldVal, newVal) {
-						if (newVal) {
+					function(oldValue, newValue) {
+						if (newValue) {
 							updateAverageStars();
 						}
 					}
