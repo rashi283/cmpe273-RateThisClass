@@ -1,8 +1,10 @@
 
 <div class="page-header">
 	<h1>Class List</h1>
-	<p class="lead" ng-hide="userLoggedIn" style="color:red;font-size:15px;"> Please login to create a class!</p>
-	
+	<p class="lead" ng-hide="userLoggedIn"
+		style="color: red; font-size: 15px;">Please login to create a
+		class!</p>
+
 </div>
 
 
@@ -14,9 +16,9 @@
 glyphicon-plus"></span> New Class</a>
 	</div>
 	<div class="col-xs-7">
-	
-	  	<input type="text" class="form-control" ng-model="query"
-			placeholder="Search for a class"> 		
+
+		<input type="text" class="form-control" ng-model="query"
+			placeholder="Search for a class">
 	</div>
 </div>
 <div class="row">
@@ -26,7 +28,7 @@ glyphicon-plus"></span> New Class</a>
 </div>
 
 
- <div class="row" ng-switch on="classes.length">
+<div class="row" ng-switch on="classes.length">
 	<ul ng-switch-when="0">
 		<li><em>No classes in database. Would you like to <a
 				href="#/new">create one</a>?</li>

@@ -1,5 +1,5 @@
 /*
- * GET home page.
+ * REST APIs implementation.
  */
 
 exports.index = function(req, res) {
@@ -8,32 +8,31 @@ exports.index = function(req, res) {
 	});
 };
 var mongoose = require('mongoose');
-//var db = mongoose.createConnection('localhost', 'ratethisclass');
+
 //var db = mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connect('mongodb://shaji:shaji@ds053658.mongolab.com:53658/ratethisclass');
 var ClassSchema = require('../models/Class.js').ClassSchema;
 var Class = db.model('classes', ClassSchema);
 
 //aws ses
-/*
 var aws = require('aws-sdk');
 aws.config.loadFromPath('config.json');
 var ses = new aws.SES({apiVersion: '2010-12-01'});
 //verified email id for admin
 var to = ['ratethisclass@gmail.com'];
 var from = 'ratethisclass@gmail.com';
-*/
-// JSON API for list of classes
+
+// REST API for list of classes
 exports.list = function(req, res) {
 	Class.find({}, 'className', function(error, classes) {
 		res.json(classes);
 	});
 };
-// JSON API for getting a single class
+// REST API for getting a single class
 exports.thisclass = function(req, res) {
 	var classId = req.params.id;
 	var userId = req.query.user;
-	console.log("************"+userId);
+	
 	Class.findById(classId, '', {lean : true}, function(err, thisclass) {
 		var userRated = false, userItem, classRated = true;
 		var class_rtng_sum = 0; var class_tot_rating = 0;
@@ -55,18 +54,15 @@ exports.thisclass = function(req, res) {
 			        item.averageRating = averageRating;
 			        for (rat in item.rating)
 			        {
-			        	var rte = item.rating[rat];
-			        	console.log(rte.user);
-			        	console.log(rte.rating_scale);
-			        	console.log(userId);
+			        	var rte = item.rating[rat];			        	
 			        	if(rte.ip === (req.header('x-forwarded-for') || req.ip) && (rte.rating_scale))
 			        	{
-			        		console.log("After checking user id... Entering the loop");
+			        		
 							userRated = true;
 							userItem = {_id: item._id, category: item.category, text: item.text, rating: rte.rating_scale, averageRating: item.averageRating };
 			        	}
 			        }
-				}//end of if
+				}
 				else
 				{
 					userRated = false;
@@ -74,9 +70,7 @@ exports.thisclass = function(req, res) {
 				}
 				item.userRated = userRated;
 				item.userItem = userItem;
-				console.log("===================");
-				console.log(item.userRated);
-				console.log("===================");
+				
 			}
 			
 			for (i in thisclass.items) 
@@ -97,7 +91,7 @@ exports.thisclass = function(req, res) {
 				}
 				
 			}
-			console.log("rated item "+rated_item);
+			
 			class_tot_rating = class_rtng_sum/rated_item;
 			for(a in thisclass.items)
 			{
@@ -110,10 +104,9 @@ exports.thisclass = function(req, res) {
 				
 			}
 			thisclass.userRated = classRated;
-			console.log("-------------total rating whioofofofo------------");
-			console.log(thisclass.userRated);
+			
 			thisclass.totalRating = Math.round(class_tot_rating*100)/100;
-			console.log(thisclass.totalRating);
+			
 			res.json(thisclass);
 		} else {
 			res.json({
@@ -122,7 +115,7 @@ exports.thisclass = function(req, res) {
 		}
 	});
 };
-// JSON API for creating a new class
+// REST API for creating a new class
 exports.create = function(req, res) {
 	var reqBody = req.body, items = reqBody.items.filter(function(v) {
 		return v.text !== '';
@@ -137,7 +130,7 @@ exports.create = function(req, res) {
 		if (err || !doc) {
 			throw 'Error';
 		} else {
-			/*ses.sendEmail( { 
+			ses.sendEmail( { 
 				   Source: from, 
 				   Destination: { ToAddresses: to },
 				   Message: {
@@ -146,7 +139,7 @@ exports.create = function(req, res) {
 				       },
 				       Body: {
 				           Text: {
-				               Data: 'Hello Admin,\nA new class with class name:'+thisclass.className+ ' has been created!.\nPlease make sure that the class '+thisclass.className+' taught by '+thisclass.professor+' exists in Session '+thisclass.session+". Thank you!",
+				               Data: 'Hello Admin,\nA new class with class name:'+thisclass.className+ ' has been created!.\nPlease verify that the class '+thisclass.className+' taught by '+thisclass.professor+' exists in Session '+thisclass.session+". Thank you!",
 				           }
 				        }
 				   }
@@ -155,7 +148,7 @@ exports.create = function(req, res) {
 				    if(err) console.log(err);
 				        console.log('Email sent:');
 				        console.log(data);
-				 }); */
+				 }); 
 			res.json(doc);
 		}
 	});
@@ -178,9 +171,7 @@ exports.rate = function(socket) {
                 
         for(var i = 0, ln = doc.items.length; i < ln; i++) {
         	
-          var item = doc.items[i];
-          console.log("..............................................");
-          console.log(item);
+          var item = doc.items[i];          
           var sum_rate = 0, averageRating = 0; 
           if(item.rating.length > 0)
           {
@@ -190,8 +181,7 @@ exports.rate = function(socket) {
           }
           averageRating = sum_rate/item.rating.length;
           item.averageRating = Math.round(averageRating*100)/100; 
-          console.log("-------------Item's average rating.........");
-          console.log(item.averageRating);
+         
           class_doc.items[i].averageRating = item.averageRating;
           doc.items[i].averageRating = item.averageRating;
           }//end of if
@@ -221,15 +211,12 @@ exports.rate = function(socket) {
         	  class_rating_sum = class_rating_sum + item.averageRating;
     	  }
         } 
-        console.log("Items that were rated: ", item_rated);
+        
         class_total_rating =  class_rating_sum/item_rated;
         class_doc.totalRating = Math.round(class_total_rating*100)/100;
-        console.log("----------------Class's Total Rating---------------");
-        console.log(class_doc.totalRating);
+     
         doc.totalRating = class_doc.totalRating; 
-        //console.log("============================");
-        //console.log(class_doc);
-        //console.log("============================");
+      
         doc.save(function(err, result) {
       	  if(result){
       	  console.log("Database updated with total Rating");
@@ -244,10 +231,9 @@ exports.rate = function(socket) {
   });
 };
 
-//JSON API for updating a class
+//REST API for updating a class
 exports.update=function(req,res){
-	var reqBody = req.body;
-	console.log(reqBody);
+	var reqBody = req.body;	
 	var item=reqBody; 
 	var classId=req.params.id;
 	Class.findById(classId, '', {
@@ -265,7 +251,7 @@ exports.update=function(req,res){
 		}
 	});	
 };
-//Rashi
+//REST API for delete
 exports.del = function(req, res){
 	var clsId = req.params.id;
 	Class.findById(clsId, '', {
@@ -283,19 +269,17 @@ exports.del = function(req, res){
 		}
 	});	
 };
-//Rashi
+
 
 exports.addComment=function(req,res){
-	console.log("hi i am here");
-	var reqBody = req.body;
-	console.log(reqBody);
+	
+	var reqBody = req.body;	
 	var classId=req.params.id;
 	Class.findById(classId, '', {
 		lean : true
 	}, function(err, thisclass) {
-		if (thisclass) {
+		if (thisclass) {		
 			
-			//Class.update({ '_id' : classId}, {$set:reqBody}, function(err, result){
 			Class.update({ '_id' : classId}, {$push:{comments:reqBody}}, function(err, result){
 				if (err || !result) {
 					throw 'Error';

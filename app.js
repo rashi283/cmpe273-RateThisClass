@@ -32,18 +32,16 @@ app.get('/', routes.index);
 app.get('/classes/classes', routes.list);
 app.get('/classes/:id', routes.thisclass);
 app.post('/classes', routes.create);
-app.post('/rate', routes.rate);
+//app.post('/rate', routes.rate);
 app.put('/classes/:id/items',routes.update);
-app.get('/users', user.list);
+//app.get('/users', user.list);
 app.del('/classes/:id', routes.del);
 app.put('/classes/:id',routes.addComment);
 
 
-//http.createServer(app).listen(app.get('port'), function(){
-  //console.log('Express server listening on port ' + app.get('port'));
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
 
+var io = require('socket.io').listen(server);
 io.sockets.on('connection', routes.rate);
 
 server.listen(app.get('port'), function(){
